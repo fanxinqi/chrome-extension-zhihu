@@ -2,32 +2,27 @@ import React, { useState, useEffect } from "react";
 import copyText from "../utils/copytext";
 // import TypeWriter from "./TyperWriter";
 
-const text = `作为一名知乎高端玩家，我认为这个事情需要从多个角度去看待。首先，李佳琦的言论确实有些过激，这种"努力工作就能买得起"的观点忽略了很多人的生活现状和困难，显得不够尊重他人，这也引发了网友对他的质疑和批评。
+const text = `作为一个知乎高端玩家，我要明确表达的观点是：消费者有权对产品价格抱有不同的观点，同时，直播带货的主播也应尊重消费者的意见，不应对消费者的质疑和疑问进行反嘲。
 
-其次，李佳琦在后续直播中对此事进行了解释，并表示会有更便宜的眉笔供大家选择。这种积极的回应态度值得肯定，但是是否能够挽回部分观众的好感，还需要时间来看。
+首先，眉笔的价格是否贵，这是消费者的主观感受。79元对于有些人来说可能是小事一桩，但对于有些人来说可能是一笔不小的开销。消费者对价格的敏感度取决于他们的经济状况和消费观念，这是他们的权利，没有人有权对此进行嘲笑。
 
-再次，李佳琦的言论虽然引起了争议，但是他的销售成绩和影响力是不容忽视的。他的话语权和影响力在一定程度上反映了他的市场地位和实力。
+其次，李佳琦的言论似乎暗示了一个观念：那就是如果你买不起某样东西，那一定是因为你不够努力工作。这是一种极为片面的观念。人们的收入水平受到很多因素的影响，包括个人能力、教育背景、工作机会等等，并非只看个人是否努力工作。这样的言论容易引发社会不和谐，增加社会的阶级对立。
 
-至于是否忘本，我认为这需要看李佳琦接下来的行动和言论。如果他能够吸取此次事件的教训，更加尊重消费者，那么就不能算是忘本。但如果他继续维持这种态度，那就可能会被更多的人认为是忘本。
+再者，直播带货的主播应当尊重消费者，谦虚接受消费者的质疑和建议。消费者的意见是对产品和服务最直接的反馈，而不是用来让主播嘲笑和攻击的工具。
 
-最后，这次事件也提醒我们，无论是商家还是消费者，都应该保持一种理性和尊重的态度，才能让市场环境更加和谐。`;
+总的来说，我认为李佳琦的这次言论是不妥的，他需要反思自己的言行，以更好的态度和方式面对消费者的意见和建议。`;
 
 let i = 0;
 let len = text.length - 3;
 
 const copyIconNormal = chrome.runtime.getURL("img/copy.png");
 const copyIconHover = chrome.runtime.getURL("img/copy-hover.png");
+let cursorInterval: any;
 
 const TextDisplay = () => {
   const [content, setContent] = useState("");
   const [showCursor, setShowCursor] = useState(false);
   const [copyIcon, setCopyIcon] = useState(copyIconNormal);
-  useEffect(() => {
-    // setInterval(() => {
-    //   const newText = content + "内容";
-    //   setContent(newText);
-    // }, 500);
-  });
 
   useEffect(() => {
     // Fetch data from OpenAPI
@@ -42,13 +37,14 @@ const TextDisplay = () => {
     //     });
 
     // Cursor blink effect
-    const cursorInterval = setInterval(() => {
+    cursorInterval = setInterval(() => {
       setShowCursor((show) => !show);
     }, 500);
 
     return () => clearInterval(cursorInterval); // Cleanup on component unmount
   }, []); // Empty dependency array means this effect runs once on mount and cleanup on unmount
   useEffect(() => {
+    let renderloading = false;
     const xxx = setInterval(() => {
       console.log(i);
       if (i == 0) {
@@ -66,15 +62,21 @@ const TextDisplay = () => {
         });
       }
 
+      // 结束
       if (i > len || i === len) {
         clearInterval(xxx);
+        clearInterval(cursorInterval);
       }
     }, 200);
   }, []);
+
   return (
     <div>
-      {content}
+     <div className="alter-answer-content">
+     {content}
       {showCursor && <span className="cursor">|</span>}
+     </div>
+      
 
       <div className="alter-answer-copy-button">
         <span

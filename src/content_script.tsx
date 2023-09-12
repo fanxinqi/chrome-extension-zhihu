@@ -49,10 +49,12 @@ function observe(observeSelector: string, firstCallBack?: Function) {
 }
 
 function fireContentLoadedEvent() {
-  const observeSelector =
-    "#root > div > main > div > form > div > div:nth-child(2)";
+  // const observeSelector =
+  //   "#root > div > main > div > form > div > div:nth-child(2)";
+  const observeSelector = "#AnswerFormPortalContainer";
   observe(observeSelector, (target: any, mutation: any) => {
     console.log(target);
+    (document.querySelector(observeSelector) as any).style.position = 'relative';
     const insertDom = document.createElement("div");
     insertDom.className = "alter-zhihu-aigc-wrap";
     const root = createRoot(insertDom);
@@ -63,10 +65,6 @@ function fireContentLoadedEvent() {
     );
     target.appendChild(insertDom);
   });
-  // const editerPandel = document.querySelector(
-  //   "#root > div > main > div > form > div > div:nth-child(2)"
-  // );
-  // console.log(editerPandel);
 }
 // 绑定这个事件需要在 manifest 中设定 "run_at": "document_start"
 document.addEventListener("DOMContentLoaded", fireContentLoadedEvent, false);

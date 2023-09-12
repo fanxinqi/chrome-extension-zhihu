@@ -20,11 +20,15 @@
   margin-left: 10px;
   color: #333;
   font-size: 16px;
-  font-weight: 500;
-  line-height: 28px;
 }
 .alter-answer {
   margin-top: 10px;
+}
+.alter-answer-content {
+  color: #333;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
 }
 .alter-answer-copy-button {
   color: #1e1f24;
