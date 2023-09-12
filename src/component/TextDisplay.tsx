@@ -23,6 +23,7 @@ const TextDisplay = () => {
   const [content, setContent] = useState("");
   const [showCursor, setShowCursor] = useState(false);
   const [copyIcon, setCopyIcon] = useState(copyIconNormal);
+  const [showCopy, setShowCopy] = useState(false);
 
   useEffect(() => {
     // Fetch data from OpenAPI
@@ -66,19 +67,19 @@ const TextDisplay = () => {
       if (i > len || i === len) {
         clearInterval(xxx);
         clearInterval(cursorInterval);
+        setShowCopy(true);
       }
-    }, 200);
+    }, 100);
   }, []);
 
   return (
     <div>
-     <div className="alter-answer-content">
-     {content}
-      {showCursor && <span className="cursor">|</span>}
-     </div>
-      
+      <div className="alter-answer-content">
+        {content}
+        {showCursor && <span className="cursor">|</span>}
+      </div>
 
-      <div className="alter-answer-copy-button">
+      {showCopy ? <div className="alter-answer-copy-button">
         <span
           onMouseEnter={() => setCopyIcon(copyIconHover)}
           onMouseLeave={() => setCopyIcon(copyIconNormal)}
@@ -88,7 +89,8 @@ const TextDisplay = () => {
         >
           <img src={copyIcon} />
         </span>
-      </div>
+      </div> : null}
+
     </div>
   );
 };
