@@ -1,25 +1,30 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import openai from "@/utils/openAiServices";
+import { OpenAI } from 'openai';
 
-type Data = {
-  name: string
-}
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+});
 
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === 'POST') {
+  if (req.method === 'GET') {
     // Set the appropriate headers for Server Sent Events - SSE
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
 
     // extract the prompt
-    const { prompt } = req.body
+    const { prompt } = req.query;
+    // res.status(200).json({ result:prompt });
+    // return;
 
     // no await
-    const response = openai.createCompletion({
+    const response = openai.
+    
+    
+    ({
       model: "text-davinci-003",
       prompt,
       max_tokens: 50,
