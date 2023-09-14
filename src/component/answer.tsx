@@ -1,9 +1,21 @@
 import React, { useEffect, useState } from "react";
+import useEffectOnce from "../utils/useEffectOnce";
 import TextDisplay from "./TextDisplay";
 
 const Answer = () => {
-  const [count, setCount] = useState(0);
-  const [currentURL, setCurrentURL] = useState<string>();
+  useEffectOnce(() => {
+    const title = (document.querySelector(
+      ".QuestionHeader-title"
+    ) as any)?.innerText;
+    if (title) {
+      chrome.runtime.sendMessage({ type: "fetch", title: title }, function (
+        response
+      ) {
+        console.log(response); // "test"
+      });
+    }
+  });
+
   return (
     <>
       <div className="alter-title">

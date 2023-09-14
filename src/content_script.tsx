@@ -53,7 +53,6 @@ function fireContentLoadedEvent() {
   //   "#root > div > main > div > form > div > div:nth-child(2)";
   const observeSelector = "#AnswerFormPortalContainer";
   observe(observeSelector, (target: any, mutation: any) => {
-    console.log(target);
     (document.querySelector(observeSelector) as any).style.position = 'relative';
     const insertDom = document.createElement("div");
     insertDom.className = "alter-zhihu-aigc-wrap";

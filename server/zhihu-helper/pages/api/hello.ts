@@ -1,86 +1,40 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { OpenAI } from 'openai';
-
+import type { NextApiRequest, NextApiResponse } from "next";
+import OpenAI from "openai";
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY, // defaults to process.env["OPENAI_API_KEY"]
 });
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === 'GET') {
+  console.log();
+  if (req.method === "POST") {
     // Set the appropriate headers for Server Sent Events - SSE
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
 
     // extract the prompt
-    const { prompt } = req.query;
-    // res.status(200).json({ result:prompt });
-    // return;
+    const { prompt } = JSON.parse(req.body);
 
-    // no await
-    const response = openai.
-    
-    
-    ({
-      model: "text-davinci-003",
-      prompt,
-      max_tokens: 50,
+    const stream = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
-      stream: true,  // mandatory for streaming
-    }, { responseType: 'stream' });
+      stream: true,
+    });
 
-    response.then((resp: {
-      data: {
-        on: (arg0: string, arg1: (//nextjs.org/docs/api-routes/introduction
-          data: any) => void) => void;
-      };
-    }) => {
+    for await (const part of stream) {
+      console.log(JSON.stringify(part.choices[0]));
+      res.write(JSON.stringify(part.choices[0]));
+    }
 
-      // we are listening to the event name: 'data'
-      resp.data.on('data', data => {
-
-        // data is a buffer
-        // data.toString() converts to a readable string like below:
-        // data.toString() gives this -> data: {"id":"cmpl-7MwK...","object":"text_completion","created":1685702342,"choices":[{"text":" joy","index":0,"logprobs":null,"finish_reason":null}],"model":"text-davinci-003"}
-        const lines = data.toString().split('\n').filter((line: string) => line.trim() !== '');
-
-        // lines is an array of below lines
-        for (const line of lines) {
-
-          // line is this without \n in the end ->: data: {"id":"cmpl-7MwTOu3fnOCKxMMYvBmrLPfZ2hRxJ","object":"text_completion","created":1685702342,"choices":[{"text":" it","index":0,"logprobs":null,"finish_reason":null}],"model":"text-davinci-003"}
-          // replace 'data: ' with an empty string
-          const message = line.replace(/^data: /, '');
-
-          // the last line will have line -> data: [DONE]
-          if (message === '[DONE]') {
-            res.end();
-            return
-          }
-
-          // message is this unless [DONE] -> {"id":"cmpl-7MwTOu3fnOCKxMMYvBmrLPfZ2hRxJ","object":"text_completion","created":1685702342,"choices":[{"text":" it","index":0,"logprobs":null,"finish_reason":null}],"model":"text-davinci-003"}
-          const parsed = JSON.parse(message)
-
-          // parse to js object
-          const data = { response: parsed.choices[0].text }
-
-          // adding "data: " as it is a server sent event
-          const writeData = `data: ${JSON.stringify(data)}`
-
-          // write the data to stream
-          res.write(writeData)
-        }
-      });
-    })
-
-    // Cleanup function
-    req.on('close', () => {
+    req.on("close", () => {
       res.end();
     });
   } else {
     // Handle other HTTP methods or return an appropriate error response
-    res.status(405).json({ error: 'Method Not Allowed' });
+    res.status(405).json({ error: "Method Not Allowed" });
   }
 }

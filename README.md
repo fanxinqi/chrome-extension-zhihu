@@ -68,3 +68,7 @@ Load `dist` directory
 
 ## Test
 `npx jest` or `npm run test`
+
+## 遇到的问题
+1.(https://juejin.cn/post/7138428364850724872)
+2.[chrome extension fetch data](https://javascript.plainenglish.io/fetch-data-in-chrome-extension-v3-2b73719ffc0e)
