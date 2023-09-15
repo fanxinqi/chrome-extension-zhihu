@@ -19,6 +19,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
           const { value, done } = await reader.read();
           if (done) break;
           let chunk = new TextDecoder("utf-8").decode(value);
+          // console.log(chunk);
           // const chunkJSON = JSON.parse(chunk)
           // sendResponse(chunk);
           chrome.tabs.query({ active: true, currentWindow: true }, function (

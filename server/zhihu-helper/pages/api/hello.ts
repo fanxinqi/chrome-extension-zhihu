@@ -5,6 +5,16 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // defaults to process.env["OPENAI_API_KEY"]
 });
 
+function stringToUint8Array(str: string) {
+  var arr = [];
+  for (var i = 0, j = str.length; i < j; ++i) {
+    arr.push(str.charCodeAt(i));
+  }
+
+  var tmpUint8Array = new Uint8Array(arr);
+  return tmpUint8Array;
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -27,8 +37,14 @@ export default async function handler(
 
     for await (const part of stream) {
       console.log(JSON.stringify(part.choices[0]));
-      res.write(JSON.stringify(part.choices[0]));
+      const content = part.choices[0]?.delta?.content;
+      if (content) {
+        res.write(part.choices[0]?.delta?.content);
+      } else if (part.choices[0]?.finish_reason === "stop") {
+        res.write('fanxinqi_done');
+      }
     }
+    // res.write(stringToUint8Array("fanxinqi_done"));
 
     req.on("close", () => {
       res.end();

@@ -23,20 +23,16 @@ const TextDisplay = () => {
     ) {
       if (message && message.type === "chatgpt_respons_stream") {
         // console.log(message.chunk);
-        const chunkJSON = JSON.parse(message.chunk);
-        console.log(chunkJSON);
+        // const chunkJSON = JSON.parse(message.chunk);
+        // console.log(chunkJSON);
 
         // stream end
-        if (
-          chunkJSON?.finish_reason &&
-          chunkJSON?.finish_reason === "stop"
-        ) {
+        if (message.chunk && message.chunk.includes("fanxinqi_done")) {
           console.log("stream end");
           clearInterval(cursorInterval);
           setShowCopy(true);
-        }
-        if (chunkJSON?.delta?.content) {
-          setContent((pre) => pre + chunkJSON?.delta?.content);
+        } else if (message.chunk) {
+          setContent((pre) => pre + message.chunk);
         }
       }
     });
@@ -46,7 +42,7 @@ const TextDisplay = () => {
 
   return (
     <div>
-       {showCopy ? (
+      {showCopy ? (
         <div className="alter-answer-copy-button">
           <span
             onMouseEnter={() => setCopyIcon(copyIconHover)}
