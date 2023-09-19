@@ -4,7 +4,6 @@ import OpenAI from "openai";
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // defaults to process.env["OPENAI_API_KEY"]
 });
-
 function stringToUint8Array(str: string) {
   var arr = [];
   for (var i = 0, j = str.length; i < j; ++i) {
@@ -19,7 +18,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log();
   if (req.method === "POST") {
     // Set the appropriate headers for Server Sent Events - SSE
     res.setHeader("Content-Type", "text/event-stream");
