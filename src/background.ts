@@ -7,7 +7,7 @@ polling();
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.type === "fetch") {
-    fetch("http://127.0.0.1:3000/api/hello", {
+    fetch("https://zhihu-help.agi010.cn/api/hello", {
       method: 'POST',
       body: JSON.stringify({
         prompt: message.title,

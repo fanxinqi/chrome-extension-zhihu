@@ -5,13 +5,21 @@ const copyIconNormal = chrome.runtime.getURL("img/copy.png");
 const copyIconHover = chrome.runtime.getURL("img/copy-hover.png");
 let cursorInterval: any;
 
-const TextDisplay = () => {
+const TextDisplay = ({ title }: any) => {
   const [content, setContent] = useState("");
   const [showCursor, setShowCursor] = useState(false);
   const [copyIcon, setCopyIcon] = useState(copyIconNormal);
   const [showCopy, setShowCopy] = useState(false);
 
   useEffectOnce(() => {
+    console.log(title)
+    if (title) {
+      chrome.runtime.sendMessage({ type: "fetch", title: title }, function (
+        response
+      ) {
+        console.log(response); // "test"
+      });
+    }
     cursorInterval = setInterval(() => {
       setShowCursor((show) => !show);
     }, 500);
@@ -32,6 +40,7 @@ const TextDisplay = () => {
           clearInterval(cursorInterval);
           setShowCopy(true);
         } else if (message.chunk) {
+          console.log(message.chunk);
           setContent((pre) => pre + message.chunk);
         }
       }

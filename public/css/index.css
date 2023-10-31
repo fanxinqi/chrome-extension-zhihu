@@ -7,8 +7,6 @@
 .alter-ai-box {
   background: #ffffff;
   padding: 10px;
-  overflow-y: auto;
-  height: 600px;
   border: 1px solid;
   margin-top:20px;
 }
@@ -34,6 +32,8 @@
 
 .alter-answer {
   margin-top: 10px;
+  height: 600px;
+  overflow-y: auto;
 }
 
 .alter-answer-content {

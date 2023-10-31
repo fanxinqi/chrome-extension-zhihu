@@ -24,18 +24,6 @@ function observe(observeSelector: string, firstCallBack?: Function) {
             firstCallBack(target.querySelector(observeSelector), mutation);
         }
       }
-
-      // 变化的类型
-      // switch (mutation.type) {
-      //   case "characterData":
-      //     // 文本内容变化
-      //     target.render();
-      //     break;
-      // case "attributes":
-      //   // rows属性值发生了变化
-      //   target.render();
-      //   break;
-      // }
     });
   }
   const observer = new MutationObserver(changeCallBack);
@@ -49,8 +37,6 @@ function observe(observeSelector: string, firstCallBack?: Function) {
 }
 
 function fireContentLoadedEvent() {
-  // const observeSelector =
-  //   "#root > div > main > div > form > div > div:nth-child(2)";
   const observeSelector = "#AnswerFormPortalContainer";
   observe(observeSelector, (target: any, mutation: any) => {
     (document.querySelector(observeSelector) as any).style.position = 'relative';
