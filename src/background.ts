@@ -1,10 +1,3 @@
-function polling() {
-  // console.log("polling");
-  setTimeout(polling, 1000 * 30);
-}
-
-polling();
-
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.type === "fetch") {
     fetch("https://zhihu-help.agi010.cn/api/hello", {
