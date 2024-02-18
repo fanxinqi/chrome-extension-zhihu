@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Answer from "./component/answer";
 import { createRoot } from "react-dom/client";
+import wrapDrag from "./utils/wrapDrag";
 
 function observe(observeSelector: string, firstCallBack?: Function) {
   const observeCallbackHistory: any = {};
@@ -42,6 +43,7 @@ function fireContentLoadedEvent() {
     (document.querySelector(observeSelector) as any).style.position = 'relative';
     const insertDom = document.createElement("div");
     insertDom.className = "alter-zhihu-aigc-wrap";
+    wrapDrag(insertDom);
     const root = createRoot(insertDom);
     root.render(
       <React.StrictMode>
